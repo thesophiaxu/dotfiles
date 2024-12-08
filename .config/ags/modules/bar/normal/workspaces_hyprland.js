@@ -53,10 +53,15 @@ const WorkspaceContents = (count = 10) => {
                 // console.log('Count:', count);
                 // console.log('Mask:', self.attribute.workspaceMask.toString(2));
                 const workspaces = Hyprland.workspaces;
+                const highestWorkspaceId = workspaces.reduce((max, ws) => Math.max(max, ws.id), 0);
+                const fullWorkspaces = [];
+                for (let i = 1; i <= highestWorkspaceId; i++) {
+                    fullWorkspaces.push(workspaces.find(ws => ws.id === i) || { id: i, windows: 0 });
+                }
                 // console.log('Mask:', workspaceMask.toString(2));
                 self.attribute.workspaceMask = 0;
-                self.attribute.drawAmount = workspaces.length;
-                self.attribute.windowCounts = workspaces.sort((a, b) => a.id - b.id).map(ws => ws.windows);
+                self.attribute.drawAmount = fullWorkspaces.length;
+                self.attribute.windowCounts = fullWorkspaces.sort((a, b) => a.id - b.id).map(ws => ws.windows);
                 // self.attribute.initialized = true;
                 self.queue_draw();
             },
